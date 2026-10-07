@@ -1,0 +1,5 @@
+import test from"node:test";import assert from"node:assert/strict";import{customerMode,canMarkPaid,restaurantHealth}from"../src/core/operations/resilience.ts";
+test("payment outage becomes view only",()=>assert.equal(customerMode({web:"HEALTHY",payments:"DOWN",menu:"HEALTHY",tableAccess:"HEALTHY"}),"VIEW_ONLY"));
+test("never mark paid from redirect alone",()=>assert.equal(canMarkPaid({providerConfirmed:true,webhookVerified:false,amountMatches:true,orderAlreadyPaid:false}),false));
+test("verified provider webhook can mark paid",()=>assert.equal(canMarkPaid({providerConfirmed:true,webhookVerified:true,amountMatches:true,orderAlreadyPaid:false}),true));
+test("restaurant health flags down service",()=>assert.equal(restaurantHealth({web:"HEALTHY",payments:"HEALTHY",menu:"HEALTHY",tableAccess:"DOWN"}),"ACTION_REQUIRED"));
