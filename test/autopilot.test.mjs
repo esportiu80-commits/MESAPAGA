@@ -1,0 +1,7 @@
+import test from"node:test";import assert from"node:assert/strict";import{requiresHumanApproval,routeIncident}from"../src/core/agents/autopilot.ts";import{assessMenuDesignRequest}from"../src/core/agents/menu-design.ts";import{createMenuVersion,rollbackMenu}from"../src/core/agents/menu-version.ts";import{shouldRollback}from"../src/core/agents/audit.ts";
+test("critical actions require approval",()=>assert.equal(requiresHumanApproval({area:"PAYMENTS",kind:"MOVE_MONEY",risk:"LOW"}),true));
+test("menu design routes correctly",()=>assert.equal(routeIncident("MENU_DESIGN_CHANGE"),"MENU_DESIGN"));
+test("normal menu edits can auto publish",()=>assert.equal(assessMenuDesignRequest({restaurantId:"r1",instruction:"rename",changes:[{type:"TEXT",value:"Paella"}]}).autoPublish,true));
+test("price changes need review",()=>assert.equal(assessMenuDesignRequest({restaurantId:"r1",instruction:"price",changes:[{type:"PRICE",value:20}]}).needsReview,true));
+test("menu versions rollback",()=>{const v1=createMenuVersion(undefined,{name:"A"},"OWNER");const v2=createMenuVersion(v1,{name:"B"},"MENU_DESIGN_AGENT");assert.equal(rollbackMenu([v1,v2],1).data.name,"A")});
+test("failed health check triggers rollback",()=>assert.equal(shouldRollback({healthy:true,checks:[{name:"web",ok:false}]}),true));
