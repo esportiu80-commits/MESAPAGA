@@ -1,0 +1,2 @@
+export interface PosAdapter{getOpenOrder(tableExternalId:string):Promise<{externalOrderId:string;totalCents:number}>;markPayment(externalOrderId:string,amountCents:number,paymentReference:string):Promise<void>}
+export class SimulatedPosAdapter implements PosAdapter{async getOpenOrder(tableExternalId:string){return{externalOrderId:`sim-${tableExternalId}`,totalCents:4850}}async markPayment(){return}}
