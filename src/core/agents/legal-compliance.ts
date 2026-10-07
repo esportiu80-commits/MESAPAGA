@@ -1,0 +1,5 @@
+export type LegalArea="PRIVACY_GDPR_LOPDGDD"|"ECOMMERCE_LSSI"|"CONSUMER"|"PAYMENTS_PSD2"|"TAX_INVOICING"|"AI"|"CRYPTO_MICA";
+export type LegalCheck={area:LegalArea;status:"PASS"|"REVIEW"|"BLOCK";reason:string;source:string};
+export const SPAIN_LEGAL_BASELINE={privacy:"RGPD (UE 2016/679) + LO 3/2018 LOPDGDD",ecommerce:"Ley 34/2002 LSSI-CE",consumer:"RDL 1/2007 consumidores y usuarios",payments:"PSD2 / normativa de servicios de pago aplicable",crypto:"MiCA y normativa española aplicable"};
+export function legalGate(checks:LegalCheck[]){const blocked=checks.filter(c=>c.status==="BLOCK");const review=checks.filter(c=>c.status==="REVIEW");return{canAutoPublish:blocked.length===0&&review.length===0,requiresLawyer:blocked.length>0||review.length>0,blocked,review};}
+export function legalAgentAction(checks:LegalCheck[]){const g=legalGate(checks);return{area:"LEGAL_COMPLIANCE" as const,kind:g.requiresLawyer?"REQUEST_LEGAL_REVIEW":"LEGAL_CHECK_PASSED",risk:g.requiresLawyer?"HIGH" as const:"LOW" as const,payload:{areas:checks.map(c=>c.area),sources:checks.map(c=>c.source)}};}
