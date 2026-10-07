@@ -1,0 +1,7 @@
+create table restaurants(id uuid primary key,name text not null,currency text not null default 'EUR',stripe_account_id text,created_at timestamptz not null default now());
+create table restaurant_tables(id uuid primary key,restaurant_id uuid not null references restaurants(id),label text not null,external_id text not null,active boolean not null default true,unique(restaurant_id,external_id));
+create table orders(id uuid primary key,restaurant_id uuid not null references restaurants(id),table_id uuid not null references restaurant_tables(id),external_order_id text not null,status text not null,total_cents integer not null check(total_cents>=0),paid_cents integer not null default 0 check(paid_cents>=0),version integer not null default 1,created_at timestamptz not null default now(),unique(restaurant_id,external_order_id));
+create table payments(id uuid primary key,order_id uuid not null references orders(id),amount_cents integer not null check(amount_cents>0),currency text not null default 'EUR',status text not null,provider text not null,provider_payment_id text,idempotency_key text not null unique,created_at timestamptz not null default now());
+create table payment_events(id bigserial primary key,payment_id uuid references payments(id),provider_event_id text unique,event_type text not null,payload jsonb not null,created_at timestamptz not null default now());
+create index orders_table_status_idx on orders(table_id,status);
+create index payments_order_idx on payments(order_id);
