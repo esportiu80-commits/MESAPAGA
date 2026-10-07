@@ -1,0 +1,2 @@
+export function menuUrl(origin:string,restaurantSlug:string){if(!/^[a-z0-9-]{2,80}$/.test(restaurantSlug))throw new Error("INVALID_RESTAURANT_SLUG");return new URL(`/m/${restaurantSlug}`,origin).toString()}
+export function tableFallbackQrUrl(origin:string,tableToken:string){if(!tableToken)throw new Error("INVALID_TABLE_TOKEN");return new URL(`/t/${encodeURIComponent(tableToken)}`,origin).toString()}
