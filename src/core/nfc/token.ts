@@ -1,0 +1,3 @@
+import{createHmac,timingSafeEqual}from"node:crypto";
+export function signTableToken(tableId:string,secret:string){const signature=createHmac("sha256",secret).update(tableId).digest("hex");return `${tableId}.${signature}`}
+export function verifyTableToken(token:string,secret:string){const dot=token.lastIndexOf(".");if(dot<1)return null;const tableId=token.slice(0,dot);const received=token.slice(dot+1);const expected=createHmac("sha256",secret).update(tableId).digest("hex");if(received.length!==expected.length)return null;return timingSafeEqual(Buffer.from(received),Buffer.from(expected))?tableId:null}
