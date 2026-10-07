@@ -1,6 +1,7 @@
 export type OrderStatus="OPEN"|"PARTIALLY_PAID"|"PAID"|"CANCELLED";
+export type PaymentRail="STRIPE_CONNECT"|"REDSYS"|"ADYEN";
 export type RestaurantPaymentsStatus="NOT_CONNECTED"|"ONBOARDING"|"ACTIVE"|"RESTRICTED";
-export interface Restaurant{id:string;name:string;currency:"EUR";stripeAccountId?:string;paymentsStatus?:RestaurantPaymentsStatus;payoutBankLabel?:string}
+export interface Restaurant{id:string;name:string;currency:"EUR";stripeAccountId?:string;paymentsStatus?:RestaurantPaymentsStatus;payoutBankLabel?:string;paymentRail?:PaymentRail}
 export interface Table{id:string;restaurantId:string;label:string;externalId:string;active:boolean}
 export interface OrderItem{id:string;name:string;quantity:number;unitCents:number}
 export interface Order{id:string;restaurantId:string;tableId:string;externalOrderId:string;status:OrderStatus;items:OrderItem[];totalCents:number;paidCents:number;version:number}
