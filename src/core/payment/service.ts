@@ -1,4 +1,4 @@
-import type{Order,Restaurant}from"../domain.ts";import{restaurantCanAcceptPayments}from"../domain";import type{PaymentProvider}from"./types";
+import type{Order,Restaurant}from"../domain.ts";import{restaurantCanAcceptPayments}from"../domain.ts";import type{PaymentProvider}from"./types.ts";
 export class PaymentService{private provider:PaymentProvider;constructor(provider:PaymentProvider){this.provider=provider}
 async create(order:Order,amountCents:number,idempotencyKey:string,restaurant?:Restaurant,applicationFeeCents=0){
  const pending=Math.max(0,order.totalCents-order.paidCents);
