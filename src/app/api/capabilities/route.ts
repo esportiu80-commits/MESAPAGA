@@ -1,0 +1,1 @@
+import{paymentCapabilities}from"@/core/payment/capabilities";import{defaultFlags}from"@/core/flags";export async function GET(){return Response.json({payments:paymentCapabilities,features:defaultFlags,mode:"architecture-preview"})}
