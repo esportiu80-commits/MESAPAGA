@@ -1,0 +1,2 @@
+import{NextResponse}from"next/server";import{demoMenu}from"@/lib/demo-menu";import{visibleMenu}from"@/core/menu/types";
+export async function GET(_req:Request,{params}:{params:Promise<{restaurantId:string}>}){const{restaurantId}=await params;if(restaurantId!==demoMenu.restaurantId)return NextResponse.json({error:"MENU_NOT_FOUND"},{status:404});return NextResponse.json(visibleMenu(demoMenu),{headers:{"Cache-Control":"public, max-age=30, stale-while-revalidate=300"}})}
