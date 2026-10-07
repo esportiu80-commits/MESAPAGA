@@ -1,0 +1,4 @@
+import type{AgentAction}from"./autopilot";
+export type SecuritySignal={kind:"RATE_SPIKE"|"INVALID_WEBHOOK"|"TOKEN_ABUSE"|"PAYMENT_TAMPERING"|"ADMIN_ANOMALY"|"DEPENDENCY_ALERT";severity:"LOW"|"MEDIUM"|"HIGH"|"CRITICAL";source:string;restaurantId?:string};
+export type SecurityResponse={action:AgentAction;notifyOwner:boolean;isolate:boolean};
+export function respondToSecuritySignal(s:SecuritySignal):SecurityResponse{const critical=s.severity==="CRITICAL"||s.severity==="HIGH";const kind=s.kind==="RATE_SPIKE"?"THROTTLE_SOURCE":s.kind==="INVALID_WEBHOOK"?"BLOCK_INVALID_WEBHOOK":s.kind==="TOKEN_ABUSE"?"REVOKE_SUSPECT_SESSION":s.kind==="PAYMENT_TAMPERING"?"FREEZE_PAYMENT_ATTEMPT":s.kind==="ADMIN_ANOMALY"?"LOCK_SUSPECT_ADMIN_SESSION":"QUARANTINE_DEPENDENCY_CHANGE";return{action:{area:"CYBERSECURITY",kind,risk:critical?"MEDIUM":"LOW",restaurantId:s.restaurantId,payload:{source:s.source,signal:s.kind}},notifyOwner:critical,isolate:critical};}
