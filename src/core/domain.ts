@@ -1,5 +1,5 @@
 export type OrderStatus="OPEN"|"PARTIALLY_PAID"|"PAID"|"CANCELLED";
-export type PaymentRail="STRIPE_CONNECT"|"REDSYS"|"ADYEN";
+export type PaymentRail="STRIPE_CONNECT"|"REDSYS"|"ADYEN"|"XRPL_XRP_TESTNET";
 export type RestaurantPaymentsStatus="NOT_CONNECTED"|"ONBOARDING"|"ACTIVE"|"RESTRICTED";
 export interface Restaurant{id:string;name:string;currency:"EUR";stripeAccountId?:string;paymentsStatus?:RestaurantPaymentsStatus;payoutBankLabel?:string;paymentRail?:PaymentRail}
 export interface Table{id:string;restaurantId:string;label:string;externalId:string;active:boolean}
